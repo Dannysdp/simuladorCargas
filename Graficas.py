@@ -61,7 +61,7 @@ def graficarMedidaDePotencial(listaDeCargas, medidap):
   # El en el punto pedido en "medida" se obtiene por superposición.
   potencial = sum([carga.potencial(medidap) for carga in listaDeCargas ])
   pyplot.text((medidap[0])+0.1, (medidap[1]), ('Potencial:', round(potencial, 2),'V'))
-  circle = pyplot.Circle((medidap[0],medidap[1]),0.01, color="black", zorder = 10)
+  circle = pyplot.Circle((medidap[0],medidap[1]),0.05, color="blue", zorder = 11)
   pyplot.gca().add_artist(circle)
 
 #potencial = sum([carga.potencial(medida) for carga in listaDeCargas ])
