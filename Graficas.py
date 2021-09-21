@@ -49,16 +49,22 @@ def graficarMedidaDeCampo(listaDeCargas, medida):
   # El en el punto pedido en "medida" se obtiene por superposición.
   # Se suma el aporte de cada carga disponible (VECTORIALMENTE!) para obtener el campo resultante en el punto de interés
   campo = sum([carga.campo(medida) for carga in listaDeCargas ])
-  #potencial = sum([carga.potencial(medida) for carga in listaDeCargas ])
   # El largo del vector que se dibuja es escalado para que grandes diferencias entre el módulo de distintos vectores se vean reflejadas como diferencias moderadas en los dibujos.
   # La ecuación utilizada fue considerada razonable, pero el desarrollador puede modificarla para obtener el resultado que se ajuste a sus gustos.
   escala  =(1-exp(-norm(campo)))*2
   pyplot.gca().quiver(array(medida[0]),array(medida[1]),array(campo[0]),array(campo[1]),units='xy',scale=escala,color='k')
-  #pyplot.text(array(medida[0])+0.5, array(medida[1])+0.5, "Campo:"+norm(campo))
-  pyplot.text(array(medida[0])+1, array(medida[1])+1, ('Campo:', norm(campo)))
-  potencial = sum([carga.potencial(medida) for carga in listaDeCargas ])
-  pyplot.text(array(medida[0]), array(medida[1]), ('Potencial:', norm(potencial)))
+  pyplot.text(array(medida[0])+1, array(medida[1])+1, ('Campo:', round(norm(campo),2),'V/m'))
+  #potencial = sum([carga.potencial(medida) for carga in listaDeCargas ])
+  #pyplot.text(array(medida[0]), array(medida[1]), ('Potencial:', norm(potencial)))
 
+def graficarMedidaDePotencial(listaDeCargas, medidap):
+  # El en el punto pedido en "medida" se obtiene por superposición.
+  potencial = sum([carga.potencial(medidap) for carga in listaDeCargas ])
+  pyplot.text((medidap[0])+0.1, (medidap[1]), ('Potencial:', round(potencial, 2),'V'))
+  circle = pyplot.Circle((medidap[0],medidap[1]),0.01, color="black", zorder = 10)
+  pyplot.gca().add_artist(circle)
+
+#potencial = sum([carga.potencial(medida) for carga in listaDeCargas ])
 #-----------------------------------------------------------------------------
 #Functiones para agregar elementos a graficar
 
@@ -75,6 +81,11 @@ def agregarMedidaDeCampo(listaDeMedidas, x = 0, y = 0 ):
   text  
   listaDeMedidas.append([x,y])
 
+def agregarMedidaDePotencial(listaDeMedidasp, x = 0, y = 0 ):
+  # Esta función agrega una posición (x,y) a la lista de medidas a realizar.
+  text  
+  listaDeMedidasp.append([x,y])
+
 #-----------------------------------------------------------------------------
 #Funciones para iniciar y mostrar el gráfico
 
@@ -88,9 +99,10 @@ def iniciar():
   # Además se crean dos vectores vacíos que contendrán las cargas y medidas solicitadas.
   cargas = []
   medidas = []
-  return (cargas, medidas)
+  medidasp=[]
+  return (cargas, medidas, medidasp)
 
-def mostrar(cargas = None, medidas = None):
+def mostrar(cargas = None, medidas = None, medidasp=None):
   # Esta función toma las cargas y medidas y se encarga de solicitar que se agreguen a la figura. 
   #El tamaño de la ventana en la que se mostrará la figura viene dado por el parámetro figsize que se pasa como argumento a la hora de iniciar la figura.  
   pyplot.figure(figsize=(2, 2))
@@ -98,5 +110,6 @@ def mostrar(cargas = None, medidas = None):
   # Se grafican las cargas y vectores de campo para cada caso agregado
   [graficarCargaPuntual(carga) for carga in cargas]
   [graficarMedidaDeCampo(cargas,medida) for medida in medidas]
+  [graficarMedidaDePotencial(cargas,medidap) for medidap in medidasp]
   # Finalmente se muestra el gráfico obtenido
   pyplot.show()

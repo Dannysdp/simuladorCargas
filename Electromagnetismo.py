@@ -25,4 +25,3 @@ class cargaPuntual:
     def potencial(self, r):
         vectorq = (r - self.r)
         return (cargaPuntual.k*self.q)/norm(vectorq)
-
